@@ -1,4 +1,4 @@
-import COPY from "./copy.js";
+import { template } from "./config.js";
 
 function list(array) {
   if (array.length === 0) return "None";
@@ -7,15 +7,7 @@ function list(array) {
 
 export default function (data) {
   const { fields, groups } = data;
-  return COPY.replace(/\?([@&!])(\w+)\|(.*)\?/g, (match, ...rest) => {
-    const [key, value, ifTrue] = rest;
-    let met = false;
-    if (key === "@" && fields[value]) met = true;
-    if (key === "&" && groups[value].on.length > 0) met = true;
-    if (key === "!" && groups[value].off.length > 0) met = true;
-    if (met) return ifTrue;
-    return "";
-  }).replace(/([@&!])(\w+)/g, (match, ...rest) => {
+  return template(data).replace(/([@&!])(\w+)/g, (match, ...rest) => {
     const [key, value] = rest;
     switch (key) {
       case "@":

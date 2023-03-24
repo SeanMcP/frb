@@ -1,4 +1,4 @@
-import config from "./config.js";
+import { shape } from "./config.js";
 import build from "./build.js";
 
 const form = document.querySelector("form");
@@ -35,7 +35,7 @@ function processField(field, groupLabel) {
 
 const children = [];
 
-config.groups.forEach((group) => {
+shape.groups.forEach((group) => {
   children.push(processGroup(group));
 });
 

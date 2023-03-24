@@ -1,4 +1,4 @@
-export default {
+export const shape = {
   title: "Flexible",
   groups: [
     {
@@ -64,3 +64,25 @@ export default {
     },
   ],
 };
+
+/**
+ * Receives form data and returns a string template for your report.
+ * @param {*} data
+ * @returns
+ */
+export function template(data) {
+  /**
+   * If you have conditional parts of your report, implement
+   * them here. The values will be injected later.
+   */
+  return [
+    `<b>Name</b>: @Name`,
+    `<b>Age</b>: @Age`,
+    `<b>Interests</b>: &Interests`,
+    `<b>Non interests</b>: !Interests`,
+    data.groups.Math.on.length > 0 && `<b>Math</b>: &Math`,
+    `<b>Reading skills</b>: &Reading`,
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
