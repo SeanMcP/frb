@@ -1,3 +1,3 @@
 # FRB
 
-A flexible report builder
+🥨 Flexible report builder
