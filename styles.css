@@ -8,6 +8,17 @@ body {
   margin: 0;
 }
 
-:is(input, select, textarea) {
+:is(button, input, select, textarea) {
   font: inherit;
+}
+
+fieldset[data-type="section"] > div {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+fieldset[data-type="group"] > div {
+  display: flex;
+  gap: 1rem;
 }

@@ -5,41 +5,59 @@ const form = document.querySelector("form");
 const formBody = form.querySelector("div");
 const output = document.querySelector("output");
 
-function processGroup(group) {
-  const groupEl = document.createElement("fieldset");
-  const legend = document.createElement("legend");
-  legend.textContent = group.label;
-  groupEl.appendChild(legend);
-  if (group.fields) {
-    group.fields.forEach((field) => {
-      groupEl.append(processField(field, group.label));
-    });
-  } else if (group.groups) {
-    group.groups.forEach((group) => {
-      groupEl.append(processGroup(group));
-    });
+function processField(field, parentLabel) {
+  switch (field.type) {
+    case "section":
+    case "group": {
+      let fieldsHTML = "";
+      field.fields.forEach((f) => {
+        fieldsHTML += processField(f, field.label);
+      });
+      return `
+      <fieldset id="${field.label}" data-type="${field.type}">
+        <legend>${field.label}</legend>
+        <div>${fieldsHTML}</div>
+      </fieldset>
+      `;
+    }
+    case "select": {
+      let optionsHTML = "";
+      field.fields.forEach((label) => {
+        optionsHTML += `<option>${label}</option>`;
+      });
+      return `
+      <label>
+        <span>${field.label}</span>
+        <select name="${field.label}">
+          ${optionsHTML}
+        </select>
+      </label>`;
+    }
+    case "checkbox": {
+      return `
+      <label>
+        <input type="${field.type}" name="${field.label}" data-group="${parentLabel}">
+        <span>${field.label}</span>
+      </label>`;
+    }
+    default: {
+      // Basic input cases
+      return `
+      <label>
+        <span>${field.label}</span>
+        <input type="${field.type}" name="${field.label}">
+      </label>`;
+    }
   }
-  return groupEl;
 }
 
-function processField(field, groupLabel) {
-  const label = document.createElement("label");
-  const input = document.createElement("input");
-  input.type = field.type;
-  input.name = field.label;
-  if (field.type === "checkbox") input.dataset.group = groupLabel;
-  label.appendChild(input);
-  label.appendChild(document.createTextNode(field.label));
-  return label;
-}
+let formBodyHTML = "";
 
-const children = [];
-
-shape.groups.forEach((group) => {
-  children.push(processGroup(group));
+shape.fields.forEach((field) => {
+  formBodyHTML += processField(field);
 });
 
-formBody.append(...children);
+formBody.innerHTML = formBodyHTML;
 
 function getData() {
   const formData = new FormData(form);

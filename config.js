@@ -1,8 +1,9 @@
 export const shape = {
   title: "Flexible",
-  groups: [
+  fields: [
     {
       label: "Demographics",
+      type: "section",
       fields: [
         {
           label: "Name",
@@ -16,6 +17,7 @@ export const shape = {
     },
     {
       label: "Interests",
+      type: "group",
       fields: [
         {
           label: "Soccer",
@@ -33,9 +35,11 @@ export const shape = {
     },
     {
       label: "Academics",
-      groups: [
+      type: "section",
+      fields: [
         {
           label: "Math",
+          type: "group",
           fields: [
             {
               label: "Counting",
@@ -49,6 +53,7 @@ export const shape = {
         },
         {
           label: "Reading",
+          type: "group",
           fields: [
             {
               label: "ABCs",
@@ -59,6 +64,11 @@ export const shape = {
               type: "checkbox",
             },
           ],
+        },
+        {
+          label: "Science",
+          type: "select",
+          fields: ["Biology", "Chemistry", "Physics"],
         },
       ],
     },
@@ -82,6 +92,7 @@ export function template(data) {
     `<b>Non interests</b>: !Interests`,
     data.groups.Math.on.length > 0 && `<b>Math</b>: &Math`,
     `<b>Reading skills</b>: &Reading`,
+    `<b>Favorite science domain</b>: @Science`,
   ]
     .filter(Boolean)
     .join("\n");
